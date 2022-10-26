@@ -1,40 +1,38 @@
-# SVR
-# Data Preprocessing
+# Support Vector Machine
 # Importing Libraries
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 
-# Importing Dataset
+# Importing the Database
 dataset = pd.read_csv("Position_Salaries.csv")
-x = dataset.iloc[:, 1:2].values
-y = dataset.iloc[:, -1].values
+x = dataset.iloc[:,1:2].values
+y = dataset.iloc[:,2:].values
 
 
-# Feature Scalling
+# Feature scalling
 from sklearn.preprocessing import StandardScaler
 sc_x = StandardScaler()
 sc_y = StandardScaler()
 x = sc_x.fit_transform(x)
-y = sc_y.fit_transform(y.reshape(-1, 1))
+y = sc_y.fit_transform(y)
 
 
-# Fitting the SVR to the Dataset
+# Creating SVR Model
 from sklearn.svm import SVR
-regressor = SVR(kernel="rbf")
+regressor = SVR()
 regressor.fit(x, y)
 
 
-# Predicting the test set results
-y_predict = regressor.predict(x)
+# Predicting a new result
+y_pred = sc_y.inverse_transform(regressor.predict(sc_x.transform(np.array([[6.5]]))))
 
 
-# Visualizing the SVR results
+# Visualising Results
+plt.plot(x, regressor.predict(x), color="Blue")
 plt.scatter(x, y, color="red")
-plt.plot(x, y_predict, color="blue")
-plt.title("Salary V/S Experience")
-plt.xlabel("Years Of Experience")
+plt.title("Truth Or Bluff")
+plt.xlabel("Experience Of Employees")
 plt.ylabel("Salary")
 plt.show()
- 
